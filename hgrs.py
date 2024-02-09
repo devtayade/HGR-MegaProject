@@ -1,4 +1,3 @@
-# TechVidvan hand Gesture Recognizer
 
 # import necessary packages
 
@@ -7,6 +6,7 @@ import numpy as np
 import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import autopy
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
@@ -21,7 +21,6 @@ f = open('gesture.names', 'r')
 classNames = f.read().split('\n')
 f.close()
 print(classNames)
-
 
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
@@ -62,6 +61,18 @@ while True:
             # print(prediction)
             classID = np.argmax(prediction)
             className = classNames[classID]
+            
+            # Get the position of the index finger tip
+            if classID == 1:  # Assuming index finger gesture corresponds to class 1
+                index_finger_tip_x, index_finger_tip_y = landmarks[8]
+
+                # Map the index finger position to screen resolution
+                screen_width, screen_height = autopy.screen.size()
+                mapped_x = int(np.interp(index_finger_tip_x, [0, x], [0, screen_width]))
+                mapped_y = int(np.interp(index_finger_tip_y, [0, y], [0, screen_height]))
+
+                # Move the mouse cursor
+                autopy.mouse.move(mapped_x, mapped_y)
 
     # show the prediction on the frame
     cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
