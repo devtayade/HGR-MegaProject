@@ -1,6 +1,4 @@
-
 # import necessary packages
-
 import cv2
 import numpy as np
 import mediapipe as mp
@@ -73,6 +71,14 @@ while True:
 
                 # Move the mouse cursor
                 autopy.mouse.move(mapped_x, mapped_y)
+                
+            elif classID == 5:  # Assuming three fingers shown corresponds to class 5
+                # Perform left click
+                autopy.mouse.click()
+                
+            elif classID == 2:  # Assuming open hand gesture corresponds to class 2
+                # Perform right click
+                autopy.mouse.click(button=autopy.mouse.Button.RIGHT)
 
     # show the prediction on the frame
     cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
@@ -86,5 +92,4 @@ while True:
 
 # release the webcam and destroy all active windows
 cap.release()
-
 cv2.destroyAllWindows()
